@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 interface task {
-  _id: String;
-  title: String;
-  completed: Boolean;
+  _id: string;
+  title: string;
+  completed: boolean;
   __v: any;
 }
 
@@ -25,22 +25,61 @@ function App() {
   }, []);
 
   const create_task = (title: string) => {
+    if (!(data === "")) {
+      axios.post("http://localhost:3000", {
+        command: { type: "create_task", data: { title: title } },
+      });
+      setData("");
+    }
+  };
+
+  const completed_task = (id: string) => {
     axios.post("http://localhost:3000", {
-      command: { type: "create_task", data: { title: title } },
+      command: { type: "completed_task", data: { id: id } },
     });
-    setData("");
   };
 
   return (
     <div className="App">
-      <ul>
-        <input onChange={(e) => setData(e.target.value)} value={data} />
-        <button onClick={() => create_task(data)}>+</button>
-      </ul>
-      <ul>
+      <input
+        style={{
+          marginTop: 15,
+          marginLeft: 40,
+        }}
+        onChange={(e) => setData(e.target.value)}
+        value={data}
+        onKeyDown={(e) => {
+          if (e.keyCode === 13) {
+            create_task(data);
+          }
+        }}
+      />
+
+      <ul style={{ listStyle: "none" }}>
         {tasks
           ? tasks.map((val, index) => {
-              return <li key={index}>{val.title}</li>;
+              return (
+                <li key={index}>
+                  <span
+                    onClick={() => {
+                      completed_task(val._id);
+                    }}
+                  >
+                    {val && val.completed ? "👌" : "👋"}{" "}
+                  </span>
+                  <span
+                    style={
+                      val.completed
+                        ? {
+                            textDecoration: "line-through",
+                          }
+                        : {}
+                    }
+                  >
+                    {val.title}
+                  </span>
+                </li>
+              );
             })
           : null}
       </ul>
