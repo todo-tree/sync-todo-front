@@ -64,6 +64,9 @@ function App() {
                     onClick={() => {
                       completed_task(val._id);
                     }}
+                    style={{
+                      cursor: "pointer",
+                    }}
                   >
                     {val && val.completed ? "👌" : "👋"}{" "}
                   </span>
