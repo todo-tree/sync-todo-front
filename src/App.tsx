@@ -22,6 +22,18 @@ function App() {
       setTasks((preTasks) => [...preTasks, createdTask]);
     });
 
+    socketRef.current.on("completed_task", (updatedTask: task) => {
+      setTasks((preTasks) => {
+        let prePreTasks = preTasks.slice(0, preTasks.length);
+        preTasks.map((val, index) => {
+          if (val._id === updatedTask._id) {
+            prePreTasks[index] = updatedTask;
+          }
+        });
+        return prePreTasks;
+      });
+    });
+
     return () => {
       socketRef.current.disconnect();
     };
