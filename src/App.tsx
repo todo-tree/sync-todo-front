@@ -10,6 +10,7 @@ interface task {
 
 function App() {
   const [tasks, setTasks] = useState<task[]>([]);
+  const [data, setData] = useState("");
 
   useEffect(() => {
     axios
@@ -23,13 +24,26 @@ function App() {
       });
   }, []);
 
+  const create_task = (title: string) => {
+    axios.post("http://localhost:3000", {
+      command: { type: "create_task", data: { title: title } },
+    });
+    setData("");
+  };
+
   return (
     <div className="App">
-      {tasks
-        ? tasks.map((val, index) => {
-            return <li key={index}>{val.title}</li>;
-          })
-        : null}
+      <ul>
+        <input onChange={(e) => setData(e.target.value)} value={data} />
+        <button onClick={() => create_task(data)}>+</button>
+      </ul>
+      <ul>
+        {tasks
+          ? tasks.map((val, index) => {
+              return <li key={index}>{val.title}</li>;
+            })
+          : null}
+      </ul>
     </div>
   );
 }
