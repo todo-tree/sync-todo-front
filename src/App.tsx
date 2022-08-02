@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { io } from "socket.io-client";
 
 interface task {
   _id: string;
@@ -11,6 +12,20 @@ interface task {
 function App() {
   const [tasks, setTasks] = useState<task[]>([]);
   const [data, setData] = useState("");
+
+  const socketRef = useRef<any>();
+
+  useEffect(() => {
+    socketRef.current = io(`localhost:3000`);
+
+    socketRef.current.on("message", (data: string) => {
+      console.log(data);
+    });
+
+    return () => {
+      socketRef.current.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     axios
