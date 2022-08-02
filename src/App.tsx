@@ -18,8 +18,8 @@ function App() {
   useEffect(() => {
     socketRef.current = io(`localhost:3000`);
 
-    socketRef.current.on("message", (data: string) => {
-      console.log(data);
+    socketRef.current.on("create_task", (createdTask: task) => {
+      setTasks((preTasks) => [...preTasks, createdTask]);
     });
 
     return () => {
