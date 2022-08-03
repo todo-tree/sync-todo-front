@@ -2,6 +2,7 @@ import Modal from "react-modal";
 import { Task } from "./App";
 import { useEffect, useState } from "react";
 import Confirmation from "./Confirmation";
+import axios from "axios";
 
 interface EditingModalProps {
   editingId: string | null;
@@ -44,6 +45,15 @@ const EditModal = (props: EditingModalProps) => {
       });
     }
   }, [editingId, tasks]);
+
+  const update_task = (title: string, id: string) => {
+    if (!(title === "")) {
+      axios.post("http://localhost:3000", {
+        command: { type: "update_task", data: { title: title, id: id } },
+      });
+      setEditingID(null);
+    }
+  };
 
   return (
     <>
@@ -96,8 +106,7 @@ const EditModal = (props: EditingModalProps) => {
                 ) {
                   setEditingID(null);
                 } else {
-                  console.log("Save Task", editingTask2);
-                  setEditingID(null);
+                  update_task(editingTask2.title, editingTask2._id);
                 }
               }}
             >
@@ -106,7 +115,7 @@ const EditModal = (props: EditingModalProps) => {
             <Confirmation
               isOpen={openConfirmationModal}
               saveTask={() => {
-                console.log("Save Task", editingTask2);
+                update_task(editingTask2.title, editingTask2._id);
                 setEditingID(null);
                 setOpenConfirmationModal(false);
                 setEditingID(null);
