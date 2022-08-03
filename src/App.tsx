@@ -126,7 +126,11 @@ function App() {
           : null}
       </ul>
 
-      <EditModal editingId={editingId} setEditingID={setEditingID} />
+      <EditModal
+        editingId={editingId}
+        setEditingID={setEditingID}
+        tasks={tasks}
+      />
     </div>
   );
 }
