@@ -6,10 +6,11 @@ interface TaskItemProps {
   task: Task;
   completed_task: MouseEventHandler<HTMLSpanElement>;
   deleted_task: MouseEventHandler<HTMLSpanElement>;
+  openModal: MouseEventHandler<HTMLSpanElement>;
 }
 
 const TaskItem = (props: TaskItemProps) => {
-  const { index, task, completed_task, deleted_task } = props;
+  const { index, task, completed_task, deleted_task, openModal } = props;
 
   return (
     <li key={index}>
@@ -18,6 +19,9 @@ const TaskItem = (props: TaskItemProps) => {
         onClick={deleted_task}
       >
         {"🗑️"}
+      </span>
+      <span style={{ marginRight: 6, cursor: "pointer" }} onClick={openModal}>
+        {"🖊️"}
       </span>
       <span
         onClick={completed_task}

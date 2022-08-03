@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 import TaskItem from "./TaskItem";
+import EditModal from "./Modal";
 
 export interface Task {
   _id: string;
@@ -13,6 +14,7 @@ export interface Task {
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [data, setData] = useState("");
+  const [editingId, setEditingID] = useState<string | null>(null);
 
   const socketRef = useRef<any>();
 
@@ -113,6 +115,9 @@ function App() {
                   deleted_task={() => {
                     deleted_task(val._id);
                   }}
+                  openModal={() => {
+                    setEditingID(val._id);
+                  }}
                   task={val}
                   index={index}
                 />
@@ -120,6 +125,8 @@ function App() {
             })
           : null}
       </ul>
+
+      <EditModal editingId={editingId} setEditingID={setEditingID} />
     </div>
   );
 }
