@@ -82,6 +82,7 @@ function App() {
           }
         }}
       />
+      <button onClick={() => create_task(data)}>Create</button>
 
       <ul style={{ listStyle: "none" }}>
         {tasks
