@@ -36,7 +36,7 @@ const EditModal = (props: EditingModalProps) => {
       setEditingTask1(null);
       setEditingTask2(null);
     } else {
-      tasks.map((val, index) => {
+      tasks.forEach((val, index) => {
         if (val._id === editingId) {
           setEditingTask1(tasks[index]);
           setEditingTask2(tasks[index]);

@@ -1,6 +1,4 @@
 import Modal from "react-modal";
-import { Task } from "./App";
-import { useEffect, useState } from "react";
 
 interface ConfirmationProps {
   isOpen: boolean;
