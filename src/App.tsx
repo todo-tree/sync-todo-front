@@ -35,6 +35,18 @@ function App() {
       });
     });
 
+    socketRef.current.on("delete_task", (deletedTaskId: string) => {
+      setTasks((preTasks) => {
+        let prePreTasks = preTasks.slice(0, preTasks.length);
+        preTasks.map((val, index) => {
+          if (val._id === deletedTaskId) {
+            prePreTasks.splice(index, 1);
+          }
+        });
+        return prePreTasks;
+      });
+    });
+
     return () => {
       socketRef.current.disconnect();
     };
@@ -67,6 +79,12 @@ function App() {
     });
   };
 
+  const deleted_task = (id: string) => {
+    axios.post("http://localhost:3000", {
+      command: { type: "delete_task", data: { id: id } },
+    });
+  };
+
   return (
     <div className="App">
       <input
@@ -91,6 +109,9 @@ function App() {
                 <TaskItem
                   completed_task={() => {
                     completed_task(val._id);
+                  }}
+                  deleted_task={() => {
+                    deleted_task(val._id);
                   }}
                   task={val}
                   index={index}
