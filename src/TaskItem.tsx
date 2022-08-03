@@ -1,4 +1,4 @@
-import { Task } from "./App";
+import { Task } from "./interface";
 import { MouseEventHandler } from "react";
 
 interface TaskItemProps {

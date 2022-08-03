@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Task } from "./App";
+import { Task } from "./interface";
 
 export const get_task = () => {
   return axios.post("http://localhost:3000", {

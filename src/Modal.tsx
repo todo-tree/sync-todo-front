@@ -1,5 +1,5 @@
 import Modal from "react-modal";
-import { Task } from "./App";
+import { Task } from "./interface";
 import { useEffect, useState } from "react";
 import Confirmation from "./Confirmation";
 import { update_task } from "./API";

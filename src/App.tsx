@@ -11,13 +11,7 @@ import {
   socket_create_task,
   get_task,
 } from "./API";
-
-export interface Task {
-  _id: string;
-  title: string;
-  completed: boolean;
-  __v: any;
-}
+import { Task } from "./interface";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
