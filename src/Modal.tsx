@@ -38,7 +38,6 @@ const EditModal = (props: EditingModalProps) => {
     } else {
       tasks.map((val, index) => {
         if (val._id === editingId) {
-          console.log({ index: index, task: tasks[index] });
           setEditingTask1(tasks[index]);
           setEditingTask2(tasks[index]);
         }
@@ -49,6 +48,7 @@ const EditModal = (props: EditingModalProps) => {
   return (
     <>
       <Modal
+        ariaHideApp={false}
         isOpen={editingId ? true : false}
         style={customStyle}
         onRequestClose={() => {

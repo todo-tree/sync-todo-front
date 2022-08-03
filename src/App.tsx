@@ -109,6 +109,7 @@ function App() {
           ? tasks.map((val, index) => {
               return (
                 <TaskItem
+                  key={index}
                   completed_task={() => {
                     completed_task(val._id);
                   }}
@@ -119,7 +120,6 @@ function App() {
                     setEditingID(val._id);
                   }}
                   task={val}
-                  index={index}
                 />
               );
             })

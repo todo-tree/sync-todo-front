@@ -2,7 +2,6 @@ import { Task } from "./App";
 import { MouseEventHandler } from "react";
 
 interface TaskItemProps {
-  index: number;
   task: Task;
   completed_task: MouseEventHandler<HTMLSpanElement>;
   deleted_task: MouseEventHandler<HTMLSpanElement>;
@@ -10,10 +9,10 @@ interface TaskItemProps {
 }
 
 const TaskItem = (props: TaskItemProps) => {
-  const { index, task, completed_task, deleted_task, openModal } = props;
+  const { task, completed_task, deleted_task, openModal } = props;
 
   return (
-    <li key={index}>
+    <li>
       <span
         style={{ marginRight: 6, cursor: "pointer" }}
         onClick={deleted_task}
