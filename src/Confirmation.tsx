@@ -22,6 +22,7 @@ const customStyle = {
 
 const Confirmation = (props: ConfirmationProps) => {
   const { isOpen, saveTask, destroyEditting } = props;
+
   return (
     <Modal isOpen={isOpen} style={customStyle} ariaHideApp={false}>
       <div style={{ textAlign: "center" }}>

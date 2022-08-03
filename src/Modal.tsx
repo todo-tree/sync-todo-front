@@ -2,7 +2,7 @@ import Modal from "react-modal";
 import { Task } from "./App";
 import { useEffect, useState } from "react";
 import Confirmation from "./Confirmation";
-import axios from "axios";
+import { update_task } from "./API";
 
 interface EditingModalProps {
   editingId: string | null;
@@ -32,6 +32,19 @@ const EditModal = (props: EditingModalProps) => {
 
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
 
+  const isChanged = () => {
+    if (editingTask1 && editingTask2) {
+      return (
+        editingTask1.__v === editingTask2.__v &&
+        editingTask1._id === editingTask2._id &&
+        editingTask1.completed === editingTask2.completed &&
+        editingTask1.title === editingTask2.title
+      );
+    } else {
+      return false;
+    }
+  };
+
   useEffect(() => {
     if (editingId === null) {
       setEditingTask1(null);
@@ -46,15 +59,6 @@ const EditModal = (props: EditingModalProps) => {
     }
   }, [editingId, tasks]);
 
-  const update_task = (title: string, id: string) => {
-    if (!(title === "")) {
-      axios.post("http://localhost:3000", {
-        command: { type: "update_task", data: { title: title, id: id } },
-      });
-      setEditingID(null);
-    }
-  };
-
   return (
     <>
       <Modal
@@ -63,12 +67,7 @@ const EditModal = (props: EditingModalProps) => {
         style={customStyle}
         onRequestClose={() => {
           if (editingTask1 && editingTask2) {
-            if (
-              editingTask1.__v === editingTask2.__v &&
-              editingTask1._id === editingTask2._id &&
-              editingTask1.completed === editingTask2.completed &&
-              editingTask1.title === editingTask2.title
-            ) {
+            if (isChanged()) {
               setEditingID(null);
             } else {
               setOpenConfirmationModal(true);
@@ -82,9 +81,7 @@ const EditModal = (props: EditingModalProps) => {
               value={editingTask2.title}
               onChange={(e) =>
                 setEditingTask2({
-                  _id: editingTask2._id,
-                  __v: editingTask2.__v,
-                  completed: editingTask2.completed,
+                  ...editingTask2,
                   title: e.target.value,
                 })
               }
@@ -98,15 +95,11 @@ const EditModal = (props: EditingModalProps) => {
             </button>
             <button
               onClick={() => {
-                if (
-                  editingTask1.__v === editingTask2.__v &&
-                  editingTask1._id === editingTask2._id &&
-                  editingTask1.completed === editingTask2.completed &&
-                  editingTask1.title === editingTask2.title
-                ) {
+                if (isChanged()) {
                   setEditingID(null);
                 } else {
                   update_task(editingTask2.title, editingTask2._id);
+                  setEditingID(null);
                 }
               }}
             >
@@ -118,7 +111,6 @@ const EditModal = (props: EditingModalProps) => {
                 update_task(editingTask2.title, editingTask2._id);
                 setEditingID(null);
                 setOpenConfirmationModal(false);
-                setEditingID(null);
               }}
               destroyEditting={() => {
                 setOpenConfirmationModal(false);
