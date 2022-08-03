@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
+import TaskItem from "./TaskItem";
 
-interface task {
+export interface Task {
   _id: string;
   title: string;
   completed: boolean;
@@ -10,7 +11,7 @@ interface task {
 }
 
 function App() {
-  const [tasks, setTasks] = useState<task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [data, setData] = useState("");
 
   const socketRef = useRef<any>();
@@ -18,11 +19,11 @@ function App() {
   useEffect(() => {
     socketRef.current = io(`localhost:3000`);
 
-    socketRef.current.on("create_task", (createdTask: task) => {
+    socketRef.current.on("create_task", (createdTask: Task) => {
       setTasks((preTasks) => [...preTasks, createdTask]);
     });
 
-    socketRef.current.on("updated_task", (updatedTask: task) => {
+    socketRef.current.on("updated_task", (updatedTask: Task) => {
       setTasks((preTasks) => {
         let prePreTasks = preTasks.slice(0, preTasks.length);
         preTasks.map((val, index) => {
@@ -86,29 +87,13 @@ function App() {
         {tasks
           ? tasks.map((val, index) => {
               return (
-                <li key={index}>
-                  <span
-                    onClick={() => {
-                      completed_task(val._id);
-                    }}
-                    style={{
-                      cursor: "pointer",
-                    }}
-                  >
-                    {val && val.completed ? "👌" : "👋"}{" "}
-                  </span>
-                  <span
-                    style={
-                      val.completed
-                        ? {
-                            textDecoration: "line-through",
-                          }
-                        : {}
-                    }
-                  >
-                    {val.title}
-                  </span>
-                </li>
+                <TaskItem
+                  completed_task={() => {
+                    completed_task(val._id);
+                  }}
+                  task={val}
+                  index={index}
+                />
               );
             })
           : null}
