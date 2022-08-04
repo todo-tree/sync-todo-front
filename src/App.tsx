@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import TaskItem from "./TaskItem";
 import EditModal from "./Modal";
+import Inputs from "./Inputs";
 import {
-  create_task,
   completed_task,
   deleted_task,
   socket_delete_task,
@@ -15,7 +15,6 @@ import { Task } from "./interface";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [data, setData] = useState("");
   const [editingId, setEditingID] = useState<string | null>(null);
 
   const socketRef = useRef<any>();
@@ -40,30 +39,13 @@ function App() {
 
   useEffect(() => {
     get_task().then((res) => {
-      if (res.data.ok) {
-        setTasks(res.data.tasks);
-      }
+      setTasks(res.data.ok ? res.data.tasks : []);
     });
   }, []);
 
   return (
-    <div className="App">
-      <input
-        style={{
-          marginTop: 15,
-          marginLeft: 40,
-        }}
-        onChange={(e) => setData(e.target.value)}
-        value={data}
-        onKeyDown={(e) => {
-          if (e.keyCode === 13) {
-            create_task(data);
-            setData("");
-          }
-        }}
-      />
-      <button onClick={() => create_task(data)}>Create</button>
-
+    <div>
+      <Inputs />
       <ul style={{ listStyle: "none" }}>
         {tasks
           ? tasks.map((val, index) => {

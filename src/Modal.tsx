@@ -33,16 +33,14 @@ const EditModal = (props: EditingModalProps) => {
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
 
   const isChanged = () => {
-    if (editingTask1 && editingTask2) {
-      return (
-        editingTask1.__v === editingTask2.__v &&
-        editingTask1._id === editingTask2._id &&
-        editingTask1.completed === editingTask2.completed &&
-        editingTask1.title === editingTask2.title
-      );
-    } else {
-      return false;
-    }
+    return (
+      editingTask1 &&
+      editingTask2 &&
+      editingTask1.__v === editingTask2.__v &&
+      editingTask1._id === editingTask2._id &&
+      editingTask1.completed === editingTask2.completed &&
+      editingTask1.title === editingTask2.title
+    );
   };
 
   useEffect(() => {
@@ -50,12 +48,9 @@ const EditModal = (props: EditingModalProps) => {
       setEditingTask1(null);
       setEditingTask2(null);
     } else {
-      tasks.forEach((val, index) => {
-        if (val._id === editingId) {
-          setEditingTask1(tasks[index]);
-          setEditingTask2(tasks[index]);
-        }
-      });
+      const index = tasks.findIndex((e) => e._id === editingId);
+      setEditingTask1(tasks[index]);
+      setEditingTask2(tasks[index]);
     }
   }, [editingId, tasks]);
 
@@ -66,12 +61,10 @@ const EditModal = (props: EditingModalProps) => {
         isOpen={editingId ? true : false}
         style={customStyle}
         onRequestClose={() => {
-          if (editingTask1 && editingTask2) {
-            if (isChanged()) {
-              setEditingID(null);
-            } else {
-              setOpenConfirmationModal(true);
-            }
+          if (editingTask1 && editingTask2 && isChanged()) {
+            setEditingID(null);
+          } else {
+            setOpenConfirmationModal(true);
           }
         }}
       >
@@ -86,13 +79,7 @@ const EditModal = (props: EditingModalProps) => {
                 })
               }
             />
-            <button
-              onClick={() => {
-                setEditingID(null);
-              }}
-            >
-              Cansel
-            </button>
+            <button onClick={() => setEditingID(null)}>Cansel</button>
             <button
               onClick={() => {
                 if (isChanged()) {
