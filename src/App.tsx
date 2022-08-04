@@ -12,6 +12,7 @@ import {
   get_task,
 } from "./API";
 import { Task } from "./interface";
+import development from "./config";
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -20,7 +21,7 @@ function App() {
   const socketRef = useRef<any>();
 
   useEffect(() => {
-    socketRef.current = io(`localhost:3000`);
+    socketRef.current = io(development.socket_url);
 
     socketRef.current.on("create_task", (createdTask: Task) => {
       setTasks((preTasks) => socket_create_task(preTasks, createdTask));
